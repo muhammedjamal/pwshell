@@ -1,1 +1,13 @@
-Get-Disk | Where partitionstyle -eq 'raw' | Initialize-Disk -PartitionStyle #{target.settings.customAttribute['Disk Format']} -PassThru | New-Partition -DriveLetter #{target.settings.customAttribute['Drive Letter']} -UseMaximumSize | Format-Volume -FileSystem NTFS -NewFileSystemLabel "#{target.settings.customAttribute['Disk Name']}" -Confirm:$false
+$newdisk = @(get-disk | Where-Object partitionstyle -eq 'raw')
+
+for($i = 0; $i -lt $newdisk.Count ; $i++)
+{
+
+$disknum = $newdisk[$i].Number
+$dl = get-Disk $disknum | 
+Initialize-Disk -PartitionStyle GPT -PassThru | 
+New-Partition -AssignDriveLetter -UseMaximumSize
+Format-Volume -driveletter $dl.Driveletter -FileSystem NTFS -Confirm:$false
+
+
+}
