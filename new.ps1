@@ -1,0 +1,1 @@
+Get-Disk | Where partitionstyle -eq 'raw' | Initialize-Disk -PartitionStyle #{target.settings.customAttribute['Disk Format']} -PassThru | New-Partition -DriveLetter #{target.settings.customAttribute['Drive Letter']} -UseMaximumSize | Format-Volume -FileSystem NTFS -NewFileSystemLabel "#{target.settings.customAttribute['Disk Name']}" -Confirm:$false
